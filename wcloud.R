@@ -13,9 +13,11 @@ library(tm)
 tfile=read.csv(file.choose())  ## opens a file browser so can use other files than your fixed one
 tfile=tfile[1] ## only want first column
 
+tfile <- sapply(tfile, function(row) iconv(row, "latin1", "ASCII", sub=""))
 
 tweet_corpus <- Corpus(VectorSource(tfile))
 myCorpus <- tweet_corpus
+
 
 removeURL <- function(x) gsub("http[[:alnum:][:punct:]]*", " ", x)
 myCorpus <- tm_map(myCorpus, removeURL)
@@ -25,15 +27,6 @@ removeHash <- function(x) gsub("#[[:alnum:][:punct:]]*"," ",x)
 myCorpus <- tm_map(myCorpus, removeHash)
 changeAmp <- function(x) gsub("&amp;"," ",x)
 myCorpus <- tm_map(myCorpus, changeAmp)
-replaceApostrophe <- function(x) gsub("???ш╙","'",x) 
-myCorpus <- tm_map(myCorpus, replaceApostrophe)
-removeGarbage <- function(x) gsub("???ш_"," ",x) 
-myCorpus <- tm_map(myCorpus, removeGarbage)
-removeGarbage <- function(x) gsub("???шо"," ",x) 
-myCorpus <- tm_map(myCorpus, removeGarbage)
-removeGarbage <- function(x) gsub("new pape"," ",x) 
-myCorpus <- tm_map(myCorpus, removeGarbage)
-
 
 myCorpus <- tm_map(myCorpus, tolower) 
 
